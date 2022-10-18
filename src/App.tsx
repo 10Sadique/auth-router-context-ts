@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Login from './components/Login';
+import Register from './components/Register';
+import UserContext from './contexts/UserContext';
+import Main from './layout/Main';
+import Home from './pages/Home';
+import PrivateRoute from './pages/PrivateRoute';
+
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Main />,
+        children: [
+            {
+                path: '/',
+                element: (
+                    <PrivateRoute>
+                        <Home />
+                    </PrivateRoute>
+                ),
+            },
+            {
+                path: '/home',
+                element: (
+                    <PrivateRoute>
+                        <Home />
+                    </PrivateRoute>
+                ),
+            },
+            { path: '/login', element: <Login /> },
+            { path: '/register', element: <Register /> },
+        ],
+    },
+]);
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <UserContext>
+            <RouterProvider router={router} />
+        </UserContext>
+    );
 }
 
 export default App;
